@@ -13,36 +13,39 @@ session = DBSession()
 class webserverHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
 		"""Handles all /url requests our webserver recieves to our local
-		host port 8080/restaurant
+		host port 8080/restaurants
 		"""
 		try:
-			if self.path.endswith('/restaurant'):
+			if self.path.endswith('/restaurants'):
 				self.send_response(200)
 				self.send_header('Content-type', 'text/html')
 				self.end_headers()
 
 				output = ""	
 				output += "<html><body><h3>"
+				output += "<a href='/restaurants/new'>Make a New Restaurant Here</a>" + "</br></br>"
 				restaurants = session.query(Restaurant).all()
 				for restaurant in restaurants:
 					# print restaurant.name
-					output += restaurant.name + "</br>" + "<a href='/edit'>Edit</a>" + "</br>" + "<a href='/Delete'>Delete</a>"	
+					output += restaurant.name + "</br>"  
+					output += "<a href='/edit'>Edit</a>" + "</br>"  
+					output += "<a href='/Delete'>Delete</a>"	
 					output += "</br></br></br>"
 				
-				output += "</html></h3></body>"
+				output += "</h3></body></html>"
 				self.wfile.write(output)
 				# print output
 				return
 
-			if self.path.endswith('/new'):
+			if self.path.endswith('/restaurants/new'):
 				self.send_response(200)
 				self.send_header('Content-type', 'text/html')
 				self.end_headers()
 				output = ""
 				output += "<html><body>"
 				output += "<h1>Make a New Restaurant</h1>"
-				output += "<form method='POST' enctype='multipart/form-data' action='/restaurant'>\
-						   <input type='text' name='newrest'/>\
+				output += "<form method='POST' enctype='multipart/form-data' action='/restaurants/new'>\
+						   <input type='text' name='newrestaurant' placeholder='new restaurant name'/>\
 						   <input type='submit' value='Create'/> </form>"
 				output += "</body></html>"
 				self.wfile.write(output)
@@ -52,31 +55,32 @@ class webserverHandler(BaseHTTPRequestHandler):
 		except IOError:
 			self.send_error(404, "File Not Found %s" % self.path)
 
-	# def do_POST(self):
-	# 	try:
-	# 		self.send_response(301)
-	# 		self.end_headers()
+	def do_POST(self):
+		""" Finds form and parses out the value from the name of the input
+		Then puts that value into the DB and makes a redirect back to /restaurants
+		"""
+		try:
+			if self.path.endswith('/restaurants/new'):
+				ctype, pdict = cgi.parse_header(self.headers.getheader('Content-type'))
+				print ctype, pdict
+				if ctype == 'multipart/form-data':
+					fields=cgi.parse_multipart(self.rfile,pdict)
+					print fields
+				messagecontent = fields.get('newrestaurant')
+				print "this is messagecontent"
+				print messagecontent
+				# Create new Restaurant object
+				NewRestaurant = Restaurant(name=messagecontent[0])
+				session.add(NewRestaurant)
+				session.commit()
 
-	# 		ctype, pdict = cgi.parse_header(self.header.getheader('Content-type'))
-	# 		print ctype, pdict
-	# 		if ctype == 'multipart/form-data':
-	# 			fields = cgi.parse_multipart(self.rfile, pdict)
-	# 			newrest = fields.get('newrest')
-	# 			newRestaurant = Restaurant(name=newrest)
-	# 			session.add(newRestaurant)
-	# 			session.commit()
-	# 			# print newrest
-	# 		output = ""
-	# 		output += "<html><body>"
-	# 		# output += "<h1> %s </h1>" % newrest[0]
-	# 		output += "<form method='POST' enctype='multipart/form-data' action='/restaurant'>\
-	# 				   <input type='text' name='newrest'/>\
-	# 				   <input type='submit' value='Create'/> </form>"
-
-	# 		output += "</body></html>"
-	# 		self.wfile.write(output)
-	# 	except:
-	# 		pass
+				# create a 301 redirect back to /restauarnts
+				self.send_response(301)
+				self.send_header('Content-type', 'text/html')
+				self.send_header('Location', '/restaurants')
+				self.end_headers()
+		except:
+			pass
 
 
 
