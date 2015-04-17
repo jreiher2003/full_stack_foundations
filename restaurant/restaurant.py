@@ -26,19 +26,57 @@ class webserverHandler(BaseHTTPRequestHandler):
 				restaurants = session.query(Restaurant).all()
 				for restaurant in restaurants:
 					# print restaurant.name
-					output += restaurant.name + "</br>" 	
-				# output += "</br></br></br>"	
+					output += restaurant.name + "</br>" + "<a href='/edit'>Edit</a>" + "</br>" + "<a href='/Delete'>Delete</a>"	
+					output += "</br></br></br>"
+				
 				output += "</html></h3></body>"
 				self.wfile.write(output)
-				print output
+				# print output
+				return
+
+			if self.path.endswith('/new'):
+				self.send_response(200)
+				self.send_header('Content-type', 'text/html')
+				self.end_headers()
+				output = ""
+				output += "<html><body>"
+				output += "<h1>Make a New Restaurant</h1>"
+				output += "<form method='POST' enctype='multipart/form-data' action='/restaurant'>\
+						   <input type='text' name='newrest'/>\
+						   <input type='submit' value='Create'/> </form>"
+				output += "</body></html>"
+				self.wfile.write(output)
 				return
 
 
 		except IOError:
 			self.send_error(404, "File Not Found %s" % self.path)
 
-	def do_POST(self):
-		pass
+	# def do_POST(self):
+	# 	try:
+	# 		self.send_response(301)
+	# 		self.end_headers()
+
+	# 		ctype, pdict = cgi.parse_header(self.header.getheader('Content-type'))
+	# 		print ctype, pdict
+	# 		if ctype == 'multipart/form-data':
+	# 			fields = cgi.parse_multipart(self.rfile, pdict)
+	# 			newrest = fields.get('newrest')
+	# 			newRestaurant = Restaurant(name=newrest)
+	# 			session.add(newRestaurant)
+	# 			session.commit()
+	# 			# print newrest
+	# 		output = ""
+	# 		output += "<html><body>"
+	# 		# output += "<h1> %s </h1>" % newrest[0]
+	# 		output += "<form method='POST' enctype='multipart/form-data' action='/restaurant'>\
+	# 				   <input type='text' name='newrest'/>\
+	# 				   <input type='submit' value='Create'/> </form>"
+
+	# 		output += "</body></html>"
+	# 		self.wfile.write(output)
+	# 	except:
+	# 		pass
 
 
 
