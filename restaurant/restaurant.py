@@ -29,7 +29,7 @@ class webserverHandler(BaseHTTPRequestHandler):
 				for restaurant in restaurants:
 					# print restaurant.name
 					output += restaurant.name + "</br>"  
-					output += "<a href='#'>Edit</a>" + "</br>"  
+					output += "<a href='/restaurants/{0}/edit'>Edit</a>".format(restaurant.id) + "</br>"  
 					output += "<a href='#'>Delete</a>"	
 					output += "</br></br></br>"
 				
@@ -37,6 +37,22 @@ class webserverHandler(BaseHTTPRequestHandler):
 				self.wfile.write(output)
 				# print output
 				return
+			restaurants = session.query(Restaurant).all()
+			for restaurant in restaurants:
+				if self.path.endswith('/restaurants/{0}/edit'.format(restaurant.id)):
+					self.send_response(200)
+					self.send_header('Content-type', 'text/html')
+					self.end_headers()
+					output = ""
+					output += "<html><body>"
+					output += "<form method='POST' enctype='multipart/form-data' action='/restaurants/{0}/edit'".format(restaurant.id) +">"
+					output += "<label>Bakery Bonanza</label>"
+					output += "<input type='text' name='rename' placeholder='Rename Restaurant' />"
+					output += "<input type='submit' value='Rename' />"
+					output += "</form>"
+					output += "</body></html>"
+					self.wfile.write(output)
+					return
 
 			if self.path.endswith('/restaurants/new'):
 				self.send_response(200)
@@ -64,13 +80,13 @@ class webserverHandler(BaseHTTPRequestHandler):
 		try:
 			if self.path.endswith('/restaurants/new'):
 				ctype, pdict = cgi.parse_header(self.headers.getheader('Content-type'))
-				print ctype, pdict
+				# print ctype, pdict
 				if ctype == 'multipart/form-data':
 					fields=cgi.parse_multipart(self.rfile,pdict)
-					print fields
+					# print fields
 				messagecontent = fields.get('newrestaurant')
-				print "this is messagecontent"
-				print messagecontent
+				# print "this is messagecontent"
+				# print messagecontent
 				# Create new Restaurant object
 				NewRestaurant = Restaurant(name=messagecontent[0])
 				session.add(NewRestaurant)
@@ -81,6 +97,28 @@ class webserverHandler(BaseHTTPRequestHandler):
 				self.send_header('Content-type', 'text/html')
 				self.send_header('Location', '/restaurants')
 				self.end_headers()
+
+			# edit post update
+			restaurants = session.query(Restaurant).all()
+			for restaurant in restaurants:
+				if self.path.endswith('/restaurants/{0}/edit'.format(restaurant.id)):
+					ctype, pdict = cgi.parse_header(self.headers.getheader('Content-type'))
+					if ctype == 'multipart/form-data':
+						fields = cgi.parse_multipart(self.rfile,pdict)
+
+					messageupdate = fields.get('rename')
+
+					updateName = session.query(Restaurant).filter_by(id = restaurant.id).one()
+					updateName.name = messageupdate[0]
+					session.add(updateName)
+					session.commit()
+
+					# create 301 redirect back to /restauants
+					self.send_response(301)
+					self.send_header('Content-type', 'text/html')
+					self.send_header('Location', '/restaurants')
+					self.end_headers()
+
 		except:
 			pass
 
