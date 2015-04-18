@@ -12,7 +12,8 @@ session = DBSession()
 
 class webserverHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
-		"""Handles all /url requests our webserver recieves to our local
+		"""
+		Handles all /url requests our webserver recieves to our local
 		host port 8080/restaurants
 		"""
 		try:
@@ -28,8 +29,8 @@ class webserverHandler(BaseHTTPRequestHandler):
 				for restaurant in restaurants:
 					# print restaurant.name
 					output += restaurant.name + "</br>"  
-					output += "<a href='/edit'>Edit</a>" + "</br>"  
-					output += "<a href='/Delete'>Delete</a>"	
+					output += "<a href='#'>Edit</a>" + "</br>"  
+					output += "<a href='#'>Delete</a>"	
 					output += "</br></br></br>"
 				
 				output += "</h3></body></html>"
@@ -56,7 +57,8 @@ class webserverHandler(BaseHTTPRequestHandler):
 			self.send_error(404, "File Not Found %s" % self.path)
 
 	def do_POST(self):
-		""" Finds form and parses out the value from the name of the input
+		""" 
+		Finds form and parses out the value from the name of the input
 		Then puts that value into the DB and makes a redirect back to /restaurants
 		"""
 		try:
