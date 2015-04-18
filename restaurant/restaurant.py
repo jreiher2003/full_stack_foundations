@@ -29,7 +29,7 @@ class webserverHandler(BaseHTTPRequestHandler):
 				for restaurant in restaurants:
 					# print restaurant.name
 					output += restaurant.name + "</br>"  
-					output += "<a href='#'>Edit</a>" + "</br>"  
+					output += "<a href='/restaurants/{0}/edit'>Edit</a>".format(restaurant.id) + "</br>"  
 					output += "<a href='#'>Delete</a>"	
 					output += "</br></br></br>"
 				
