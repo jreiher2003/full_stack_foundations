@@ -8,3 +8,9 @@ STEPS For running this program
 6. cd /vagrant/restaurant
 7. python flaskr.py
 8. localhost:5000/hello
+
+
+STEPS for development
+1. Get basic app set up and configured to run localhost- 1st commit
+2. import sqlalchemy packages/set up db configs -2nd commit
+
