@@ -29,14 +29,15 @@ class webserverHandler(BaseHTTPRequestHandler):
 				for restaurant in restaurants:
 					# print restaurant.name
 					output += restaurant.name + "</br>"  
-					output += "<a href='/restaurants/{0}/edit'>Edit</a>".format(restaurant.id) + "</br>"  
-					output += "<a href='#'>Delete</a>"	
+					output += "<a href='/restaurants/{0}/edit' style='color: #FFE284;'>Edit</a>".format(restaurant.id) + "</br>"  
+					output += "<a href='/restaurants/{0}/delete' style='color: #9EFFEB;'>Delete</a>".format(restaurant.id)	
 					output += "</br></br></br>"
 				
 				output += "</h3></body></html>"
 				self.wfile.write(output)
 				# print output
 				return
+
 			restaurants = session.query(Restaurant).all()
 			for restaurant in restaurants:
 				if self.path.endswith('/restaurants/{0}/edit'.format(restaurant.id)):
@@ -51,6 +52,18 @@ class webserverHandler(BaseHTTPRequestHandler):
 					output += "<input type='submit' value='Rename' />"
 					output += "</form>"
 					output += "</body></html>"
+					self.wfile.write(output)
+					return
+
+				if self.path.endswith('/restaurants/{0}/delete'.format(restaurant.id)):
+					self.send_response(200)
+					self.send_header('Content-type', 'text/html')
+					self.end_headers()
+					output = ""
+					output += "<html><body>"
+					output += "<h1>Are you sure you want to delete "
+					output += "<span style='color: blue'>" + restaurant.name  + "</span>"
+					output += "</h1></body></html>"
 					self.wfile.write(output)
 					return
 
