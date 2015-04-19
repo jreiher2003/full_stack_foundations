@@ -6,4 +6,5 @@ STEPS For running this program
 4. vagrant up
 5. vagrant ssh
 6. cd /vagrant/restaurant
-7. python restaurant.py
+7. python flaskr.py
+8. localhost:5000/hello
