@@ -136,6 +136,24 @@ class webserverHandler(BaseHTTPRequestHandler):
 					self.send_header('Location', '/restaurants')
 					self.end_headers()
 
+					return
+
+				# delete restaurant from db
+				if self.path.endswith('/restaurants/{0}/delete'.format(restaurant.id)):
+					ctype, pdict = cgi.parse_header(self.headers.getheader('Content-type'))
+					if ctype == 'multipart/form-data':
+						fields = cgi.parse_multipart(self.rfile, pdict)
+
+					delete_rest = session.query(Restaurant).filter_by(id = restaurant.id).one()
+					session.delete(delete_rest)
+					session.commit()
+
+					# create 301 redirect back to /restaunts after post
+					self.send_response(301)
+					self.send_header('Content-type', 'text/html')
+					self.send_header('Location', '/restaurants')
+					self.end_headers()
+
 		except:
 			pass
 
