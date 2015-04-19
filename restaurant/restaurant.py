@@ -37,6 +37,20 @@ class webserverHandler(BaseHTTPRequestHandler):
 				self.wfile.write(output)
 				# print output
 				return
+				
+			if self.path.endswith('/restaurants/new'):
+				self.send_response(200)
+				self.send_header('Content-type', 'text/html')
+				self.end_headers()
+				output = ""
+				output += "<html><body>"
+				output += "<h1>Make a New Restaurant</h1>"
+				output += "<form method='POST' enctype='multipart/form-data' action='/restaurants/new'>\
+						   <input type='text' name='newrestaurant' placeholder='new restaurant name'/>\
+						   <input type='submit' value='Create'/> </form>"
+				output += "</body></html>"
+				self.wfile.write(output)
+				return
 
 			restaurants = session.query(Restaurant).all()
 			for restaurant in restaurants:
@@ -62,24 +76,14 @@ class webserverHandler(BaseHTTPRequestHandler):
 					output = ""
 					output += "<html><body>"
 					output += "<h1>Are you sure you want to delete "
-					output += "<span style='color: blue'>" + restaurant.name  + "</span>"
-					output += "</h1></body></html>"
+					output += "<span style='color: blue'>" + restaurant.name  + "</span></h1>"
+					output += "<form method='POST' enctype='multipart/form-data' action='/restaurants/{0}/delete'".format(restaurant.id) +">"
+					output += "<input type='submit' name='delete_rest' value='DELETE' style='color: red'>"
+					output += "</form>"
+					output += "</body></html>"
 					self.wfile.write(output)
 					return
 
-			if self.path.endswith('/restaurants/new'):
-				self.send_response(200)
-				self.send_header('Content-type', 'text/html')
-				self.end_headers()
-				output = ""
-				output += "<html><body>"
-				output += "<h1>Make a New Restaurant</h1>"
-				output += "<form method='POST' enctype='multipart/form-data' action='/restaurants/new'>\
-						   <input type='text' name='newrestaurant' placeholder='new restaurant name'/>\
-						   <input type='submit' value='Create'/> </form>"
-				output += "</body></html>"
-				self.wfile.write(output)
-				return
 
 
 		except IOError:
