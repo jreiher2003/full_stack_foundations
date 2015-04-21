@@ -28,7 +28,7 @@ def restaurantMenu(restaurant_id):
 	# 	output +='</br>'
 	# 	output +='</br>'
 	# return output
-
+ 
 # task 1: create route for newItemMenu function here
 @app.route('/restaurants/<int:restaurant_id>/new/')
 def newItemMenu(restaurant_id):
@@ -44,6 +44,8 @@ def editMenuItem(restaurant_id, menu_id):
 def deleteMenuItem(restaurant_id, menu_id):
 	return "page to delete a new menu item. Task 3 complete"
 	
+
+
 if __name__ == '__main__':
 	
 	app.debug = True
