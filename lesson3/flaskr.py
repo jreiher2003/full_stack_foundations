@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, url_for, redirect 
+from flask import Flask, render_template, request, url_for, redirect, flash
 app = Flask(__name__)
+app.secret_key = 'some_secret'
 
 from sqlalchemy import create_engine 
 from sqlalchemy.orm import sessionmaker
@@ -47,6 +48,7 @@ def newMenuItem(restaurant_id):
 		newItem = MenuItem(name = request.form['name'], restaurant_id=restaurant_id)
 		session.add(newItem)
 		session.commit()
+		flash('You just successfully created and new menu item!')
 		return redirect(url_for('restaurantMenuItems', restaurant_id=restaurant_id))
 	
         
@@ -64,6 +66,7 @@ def editMenuItem(restaurant_id, menu_id):
 			editedItem.name = request.form['name']
 		session.add(editedItem)
 		session.commit()
+		flash('You just successfully edited a menu item!')
 		return redirect(url_for('restaurantMenuItems', restaurant_id=restaurant_id))
 	
 
@@ -78,6 +81,7 @@ def deleteMenuItem(restaurant_id, menu_id):
 	if request.method == 'POST':
 		session.delete(deleteItem)
 		session.commit()
+		flash('You just successfully deleted a menu item!')
 		return redirect(url_for('restaurantMenuItems', restaurant_id=restaurant_id))
 
 	
