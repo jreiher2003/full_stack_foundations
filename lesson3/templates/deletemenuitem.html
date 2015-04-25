@@ -1,8 +1,7 @@
-<html>
-<head>
-	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
+
 	<h1>Are you sure you want to delete {{ i.name }} ?</h1>
 
 	<form method='POST' action="#">
@@ -15,5 +14,4 @@
 		<a href="{{ url_for('restaurantMenuItems', restaurant_id=restaurant_id) }}">Cancel</a>
 
 
-</body>
-</html>
+{% endblock content %}

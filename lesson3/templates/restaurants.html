@@ -4,10 +4,10 @@
 
 {% for r in restaurant %}
 
-	<p><a href="#">{{ r.name }}</a></p>
+	<p><a href="/restaurant/{{ r.id }}/">{{ r.name }}</a></p>
 	<br>
 
 {% endfor %}
 	<br>
 
-{% endblock %}
+{% endblock content %}
