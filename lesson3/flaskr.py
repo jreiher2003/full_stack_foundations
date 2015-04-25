@@ -16,11 +16,11 @@ session = DBSession()
 @app.route('/restaurant/')
 def HelloWorld():
 	restaurant = session.query(Restaurant).all()
-	output = ''
-	for i in restaurant:
-		output += i.name 
-		output += '</br>'
-	return output
+	# output = ''
+	# for i in restaurant:
+	# 	output += i.name 
+	# 	output += '</br>'
+	return render_template('restaurants.html', restaurant=restaurant)
 
 @app.route('/restaurant/<int:restaurant_id>/')
 def restaurantMenuItems(restaurant_id):
