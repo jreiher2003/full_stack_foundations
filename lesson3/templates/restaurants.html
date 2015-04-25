@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for r in restaurant %}
+
+	<p><a href="#">{{ r.name }}</a></p>
+	<br>
+
+{% endfor %}
+	<br>
+
+{% endblock %}

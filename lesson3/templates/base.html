@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel='stylesheet' href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+
+<body>
+    <div class="nav">
+      <ul>
+        <li class="home"><a href="#">Home</a></li>
+        <li class="tutorials"><a class="active" href="#">Hot Spots</a></li>
+        <li class="about"><a href="#">About</a></li>
+        <li class="news"><a href="#">Newsletter</a></li>
+        <li class="contact"><a href="#">Contact</a></li>
+      </ul>
+    </div>
+
+    {% block content %}
+    
+    {% endblock %}
+
+    <div id="footer">
+        
+        &copy; Copyright 2015 by <a href="http://domain.invalid/"> BigJeffDogg </a>.
+        
+    </div>
+
+</body>
+</html>
