@@ -50,3 +50,49 @@ a {
 .flash {
 	background: #cee5F5;
 }
+
+/* nav styles */
+.nav ul {
+	list-style: none;
+	background-color: #444;
+	text-align: center;
+	padding: 0;
+	margin: 0 5px 0 5px;
+}
+
+.nav li {
+	font-family: 'Oswald', sans-serif;
+	font-size: 1.2em;
+	line-height: 40px;
+	height: 40;
+	border-bottom: 1px solid #888;
+	display: inline-block;
+	margin: 0 5px 0 5px;
+	
+}
+
+.nav li a {
+	padding: 4px;
+}
+
+.nav a {
+	text-decoration: none;
+	color: #fff;
+	display: block;
+	transition: .3s background-color;
+}
+
+.nav a:hover {
+	background-color: #005f5f;
+}
+
+.nav a.active {
+	background-color: #ffffcc;
+	color: #444;
+	cursor: default;
+}
+
+/* footer styles */
+#footer {
+	text-align: center;
+}
