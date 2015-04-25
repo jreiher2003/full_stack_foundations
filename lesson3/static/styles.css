@@ -52,6 +52,9 @@ a {
 }
 
 /* nav styles */
+.nav {
+	margin-bottom: 100px;
+}
 .nav ul {
 	list-style: none;
 	background-color: #444;
